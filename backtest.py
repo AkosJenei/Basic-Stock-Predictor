@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from sklearn.metrics import confusion_matrix, classification_report
 from train import model
 from data_processing import DataProcessor
@@ -20,17 +21,17 @@ Backtest configuration:
 - USE_PRICE_CHANGES: Use price returns rather than close prices if True
 """
 
-CSV_PATH        = "historical_data/AUDCHF_15m_historical_data.csv"
-N_DATAPOINTS    = 500
-N_TESTPOINTS    = 300
+CSV_PATH        = "historical_data/USDJPY_15m_historical_data.csv"
+N_DATAPOINTS    = 2000
+N_TESTPOINTS    = 500
 WINDOW          = 3
-OFFSET          = 71500
+OFFSET          = 60500
 
 INITIAL_CAP     = 5_000.0
-LEVERAGE        = 100.0 
-RISK_PER_TRADE  = 0.30
-STOP_LOSS_PCT   = 1
-TAKE_PROFIT_PCT = 1
+LEVERAGE        = 100
+RISK_PER_TRADE  = 0.3
+STOP_LOSS_PCT   = 1#0.002
+TAKE_PROFIT_PCT = 1#0.002
 
 USE_PRICE_CHANGES = False  # match setting used during training
 
@@ -144,23 +145,47 @@ print(f"\n=== Performance Summary ===")
 print(f"Cumulative Return: {cum_return:.2%}")
 print(f"Max Drawdown:     {max_dd:.2%}")
 
-"""
-Visualize results:
-- Equity curve over time
-- Drawdown curve
-- Histogram of individual trade returns
-"""
-plt.figure(figsize=(10,4))
-plt.plot(equity_curve, label="Equity Curve for XAUUSD")
-plt.title("Equity Curve for XAUUSD"); plt.grid(); plt.legend()
 
-plt.figure(figsize=(10,4))
-plt.plot(equity_curve/np.maximum.accumulate(equity_curve) - 1,
-         color="red", label="Drawdown for XAUUSD")
-plt.title("Drawdown Curve for XAUUSD"); plt.grid(); plt.legend()
 
-plt.figure(figsize=(8,4))
-plt.hist(trade_returns, bins=50)
-plt.title("Distribution of Trade Returns for XAUUSD"); plt.grid()
+
+# Plot
+fig, axs = plt.subplots(3, 1, figsize=(12, 16), sharex=False)
+
+# Equity Curve
+axs[0].plot(equity_curve, label="Equity Curve")
+axs[0].set_title("Equity Curve")
+axs[0].grid(True)
+axs[0].legend()
+
+# Drawdown
+drawdown = equity_curve / np.maximum.accumulate(equity_curve) - 1
+axs[1].plot(drawdown, color="red", label="Drawdown")
+axs[1].set_title("Drawdown Curve")
+axs[1].grid(True)
+axs[1].legend()
+
+# Trade Return Histogram
+axs[2].hist(trade_returns, bins=50, edgecolor='black')
+axs[2].set_title("Distribution of Trade Returns")
+axs[2].set_xlabel("Trade Return (PnL / Risked Margin)")
+axs[2].set_ylabel("Frequency")
+axs[2].grid(True)
+
 
 plt.show()
+
+plt.figure(figsize=(15,10))
+plt.plot(closes, label="Close Price")
+
+signal_indices = np.arange(start_idx, start_idx + len(signals_list))
+long_idx = signal_indices[np.array(signals_list) == 1]
+short_idx = signal_indices[np.array(signals_list) == -1]
+
+plt.scatter(long_idx, closes[long_idx], color='green', marker='^', label='Long Entry')
+plt.scatter(short_idx, closes[short_idx], color='red', marker='v', label='Short Entry')
+
+plt.title("Instrument Price + Entry Markers")
+plt.grid()
+plt.legend()
+plt.show()
+
