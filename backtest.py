@@ -22,7 +22,7 @@ Backtest configuration:
 """
 
 CSV_PATH        = "historical_data/USDJPY_15m_historical_data.csv"
-N_DATAPOINTS    = 2000
+N_DATAPOINTS    = 4000
 N_TESTPOINTS    = 500
 WINDOW          = 3
 OFFSET          = 60500
