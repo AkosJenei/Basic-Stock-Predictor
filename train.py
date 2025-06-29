@@ -24,16 +24,16 @@ Configuration:
 - USE_PRICE_CHANGES: If True, quantize 1-step price returns instead of closes
 """
 
-CSV_PATH      = "historical_data/USDJPY_15m_historical_data.csv"
-N_DATAPOINTS  = 2000
+CSV_PATH      = "historical_data/XAUUSD_15m_historical_data.csv"
+N_DATAPOINTS  = 5000
 N_TESTPOINTS  = 500
 WINDOW        = 3
 TEST_SIZE     = 0.2
 BATCH_SIZE    = 64
 EPOCHS        = 100
-OFFSET        = 60500
+OFFSET        = 90000
 N_BITS        = 25
-BIN_SIZE      = 0.3
+BIN_SIZE      = 7
 USE_PRICE_CHANGES = False  # Toggle between price or return quantization
 
 QUANTIZER_OUT = "quantizer.pkl"

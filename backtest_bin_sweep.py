@@ -13,7 +13,7 @@ from model import create_model
 CSV_PATH       = "historical_data/XAUUSD_15m_historical_data.csv"
 N_TOTAL        = 5000      # total points (train + test)
 N_TESTPOINTS   = 500
-OFFSET         = 60000
+OFFSET         = 30000
 WINDOW         = 3
 INITIAL_CAP    = 10000.0
 
@@ -24,7 +24,7 @@ STOP_LOSS_PCT     = 1.0
 TAKE_PROFIT_PCT   = 1.0
 
 # Sweep over these bin sizes (in price units)
-BIN_SIZES     = list(np.arange(0.05, 11, 0.05))  # 1,2,…,10
+BIN_SIZES     = list(np.arange(0.1, 11, 0.1))  # 1,2,…,10
 TEST_SPLIT    = 0.2
 EPOCHS        = 100
 BATCH_SIZE    = 64
@@ -124,7 +124,7 @@ for bin_size in BIN_SIZES:
 
 # ─── PLOT RESULTS ───────────────────────────────────────────────────────────────
 bins, equities = zip(*results)
-plt.figure(figsize=(10,6))
+plt.figure(figsize=(17,6))
 plt.plot(bins, equities, marker='o')
 plt.xlabel("Bin Size")
 plt.ylabel("Final Equity")

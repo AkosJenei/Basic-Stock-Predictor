@@ -21,13 +21,13 @@ Backtest configuration:
 - USE_PRICE_CHANGES: Use price returns rather than close prices if True
 """
 
-CSV_PATH        = "historical_data/USDJPY_15m_historical_data.csv"
-N_DATAPOINTS    = 4000
+CSV_PATH        = "historical_data/XAUUSD_15m_historical_data.csv"
+N_DATAPOINTS    = 5000
 N_TESTPOINTS    = 500
 WINDOW          = 3
-OFFSET          = 60500
+OFFSET          = 90000
 
-INITIAL_CAP     = 5_000.0
+INITIAL_CAP     = 10_000.0
 LEVERAGE        = 100
 RISK_PER_TRADE  = 0.3
 STOP_LOSS_PCT   = 1#0.002
@@ -173,19 +173,3 @@ axs[2].grid(True)
 
 
 plt.show()
-
-plt.figure(figsize=(15,10))
-plt.plot(closes, label="Close Price")
-
-signal_indices = np.arange(start_idx, start_idx + len(signals_list))
-long_idx = signal_indices[np.array(signals_list) == 1]
-short_idx = signal_indices[np.array(signals_list) == -1]
-
-plt.scatter(long_idx, closes[long_idx], color='green', marker='^', label='Long Entry')
-plt.scatter(short_idx, closes[short_idx], color='red', marker='v', label='Short Entry')
-
-plt.title("Instrument Price + Entry Markers")
-plt.grid()
-plt.legend()
-plt.show()
-
